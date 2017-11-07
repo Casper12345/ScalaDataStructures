@@ -36,6 +36,26 @@ object List {
     helper(xs)
   }
 
+  def setHead[A](xs: List[A], set: A): List[A] = xs match {
+    case Nil => Nil
+    case Cons(h, t) => Cons(set, t)
+  }
+
+  def drop[A](l: List[A], n: Int): List[A] = l match {
+    case Nil => Nil
+    case Cons(h, t) => n match {
+      case 0 => Cons(h, t)
+      case _ => drop(t, n - 1)
+    }
+  }
+
+  def dropWhile[A](l: List[A], f: A => Boolean): List[A] = l match {
+    case Nil => Nil
+    case Cons(h, t) =>
+      if (f(h)) dropWhile(Cons(h, t), f)
+      else dropWhile(t, f)
+  }
+
 }
 
 
@@ -44,8 +64,11 @@ object Main extends App {
   val l2: List[Int] = List.apply()
   val head = List.head(l)
   val tail = List.tail(l)
-  List.printList(l2)
-  //println(tail)
-
+  //List.printList(l2)
+  val l3 = List.setHead(l, 10)
+  List.printList(l3)
+  println(List.drop(l, 3))
+  val l4 = List.dropWhile(l, (x: Int) => x > 2)
+  List.printList(l4)
 
 }
