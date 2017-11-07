@@ -1,0 +1,5 @@
+package immutableList
+
+class SinglyLinkedList {
+
+}
