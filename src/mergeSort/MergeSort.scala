@@ -1,4 +1,5 @@
 package mergeSort
+/*
 
 object MergeSort {
   def apply() = new MergeSort
@@ -34,3 +35,5 @@ object Main extends App {
   m.sort(List(1, 2, 3, 4, 5, 6))
 
 }
+
+*/
