@@ -36,7 +36,37 @@ object ArrayRotation extends App {
 
   }
 
+  def rotateOneByOne[A](a: Array[A], d: Int)(implicit m: ClassTag[A]): Array[A] = {
 
-  rotate(Array(1,2,3,4,5,6,7,8,9,10), 10).foreach(println)
+    def rotateByOne(i: Int = 0, arr: Array[A]): Array[A] = {
+      val temp = arr(0)
+      @tailrec
+      def go(i: Int = 0): Unit = {
+        if(i < a.length - 1){
+          arr(i) = arr(i + 1)
+          go(i + 1)
+        }
+      }
+      go(i)
+      arr(arr.length - 1) = temp
+      arr
+    }
+
+    @tailrec
+    def go(i: Int = 0, a: Array[A]): Unit =
+      if(i < d) go(i + 1, rotateByOne(arr = a))
+
+    if(d > 0 || d <= a.length){
+      go(a = a)
+      a
+    } else {
+      a
+    }
+
+  }
+
+
+  rotate(Array(1,2,3,4,5,6,7,8,9,10), 9).foreach(println)
+  rotateOneByOne(Array(1,2,3,4,5,6,7,8,9,10), 0).foreach(println)
 
 }
