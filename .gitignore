@@ -1,3 +1,4 @@
 .gitignore
 .idea
-ScalaDataStructures2.iml
+ScalaDataStructures.iml
+out
