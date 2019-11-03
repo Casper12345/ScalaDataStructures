@@ -1,4 +1,5 @@
 import scala.annotation.tailrec
+import scala.collection.mutable
 
 
 case class Node[A](edges: List[Node[A]], value: A)
@@ -47,6 +48,40 @@ object DirectedGraph extends App {
   }
 
   println(traverseBf(List(graph.value), graph :: Nil))
+
+  @tailrec
+  def traverseBfWeighted[A](acc: List[WeightedNode[A]], queue: List[WeightedNode[A]], dist: WeightedNode[A]): List[WeightedNode[A]] = {
+
+    def getUnvisited(xs: List[WeightedNode[A]]): Option[WeightedNode[A]] = xs match {
+      case Nil => None
+      case h :: t => if (!acc.contains(h.value)) Some(h) else getUnvisited(t)
+    }
+
+    queue match {
+      case Nil => acc
+      case h :+ t => getUnvisited(t.edges) match {
+        case None => traverseBfWeighted(acc, h, dist)
+        case Some(n) => if(dist == n) traverseBfWeighted(acc :+ n.copy(weight = 0), n :: queue, dist) else traverseBfWeighted(acc :+ n.copy(weight = Int.MaxValue), n :: queue, dist)
+      }
+
+    }
+
+  }
+
+
+
+  case class WeightedNode[A](edges: List[WeightedNode[A]], value: A, weight: Int = Int.MaxValue)
+
+//  def dijkstra[A](n: Node[A], dist: Node[A]): (List[Node[A]], List[Node[A]]) = {
+//    val previousNodes: mutable.Map[Node[A], Int] = mutable.Map()
+//
+//
+//
+//
+//
+//
+//  }
+
 
 
 }
