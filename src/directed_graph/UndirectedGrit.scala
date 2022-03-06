@@ -1,6 +1,7 @@
 package directed_graph
 
 import scala.collection.mutable
+import scala.util.Random
 
 object UndirectedGrit extends App {
 
@@ -55,16 +56,6 @@ object UndirectedGrit extends App {
     Math.pow(b._1.toDouble - a._1.toDouble, 2) + Math.pow(b._2.toDouble - a._2.toDouble, 2)
   )
 
-  def eu(a: (Int, Int), b: (Int, Int)): Double = {
-    val dx = Math.abs(a._1 - b._1)
-    val dy = Math.abs(a._2 - b._2)
-    Math.sqrt(dx * dx + dy * dy)
-  }
-
-  def getManhattanDistance(a: (Int, Int), b: (Int, Int)): Double =
-    Math.abs(a._1.toDouble - b._1.toDouble) + Math.abs(a._2.toDouble - b._2.toDouble)
-
-
   def dijkstra(graph: Map[(Int, Int), List[(Int, Int)]], src: (Int, Int), dest: (Int, Int)): List[(Int, Int)] = {
 
     def getShortestDist(l: List[(Int, Int)], m: Map[(Int, Int), Double]): ((Int, Int), List[(Int, Int)]) = {
@@ -77,13 +68,14 @@ object UndirectedGrit extends App {
       case l =>
         val (u, r) = getShortestDist(l, acc.toMap.map { case (x, (d, _)) => (x, d) })
         graph(u).foreach { v =>
+          val (du, _) = acc(u)
           val (dv, _) = acc(v)
-          val alt = eu(v, dest) + eu(u, v)
+          val alt = du + getEuclideanDistance(u, v)
           if (alt < dv) {
             acc.put(v, (alt, u))
           }
         }
-        loop(r, acc)
+        loop(r.dropWhile(a => a == u), acc)
     }
 
     def findPath(p: (Int, Int), d: (Int, Int), acc: List[(Int, Int)], m: Map[(Int, Int), (Int, Int)]): List[(Int, Int)] = p match {
@@ -104,7 +96,7 @@ object UndirectedGrit extends App {
   }
 
   def createMatrix(l: List[(Int, Int)], size: Int): Array[Array[String]] = {
-    val m = Array.ofDim[String](size,size)
+    val m = Array.ofDim[String](size, size)
     var x = 0
     while (x < size) {
       var y = 0
@@ -119,7 +111,7 @@ object UndirectedGrit extends App {
 
 
   def printMatrix(l: List[(Int, Int)], size: Int): Unit = {
-    val a = createMatrix(l,size)
+    val a = createMatrix(l, size)
     var x = 0
     println("--" * size)
     while (x < size) {
@@ -134,10 +126,34 @@ object UndirectedGrit extends App {
     }
   }
 
-//    println(getManhattanDistance((0,0), (1,1)))
-//    println(getEuclideanDistance((0,0), (1,1)))
+  printMatrix(dijkstra(initGrit(120), (10, 10), (20, 70)), 120)
 
-  printMatrix( dijkstra(initGrit(10), (8, 8), (9, 9)), 10 )
+  def initMaze(size: Int): Unit = {
 
+    def r(range: Int) = Random.nextInt(range)
+
+    val start = r(size)
+
+
+//    def go(start: (Int, Int), acc: List[(Int, Int)], queue: List[(Int, Int)]): List[(Int, Int)] = {
+//      def getUnvisited(xs: List[(Int, Int)]): Option[(Int, Int)] = xs match {
+//        case Nil => None
+//        case h :: t => if (!acc.contains(h)) Some(h) else getUnvisited(t)
+//      }
+//
+//      queue match {
+//        case Nil => acc
+//        case h :+ t => getUnvisited(t.edges) match {
+//          case None => go(acc, h)
+//          case Some(n) =>
+//
+//
+//            go(acc :+ n.value, n :: queue)
+//        }
+//
+//      }
+//
+//    }
+  }
 
 }

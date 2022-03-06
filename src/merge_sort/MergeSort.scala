@@ -2,47 +2,38 @@ package merge_sort
 
 object MergeSort extends App {
 
-  def mergeSort[A](f: (A, A) => Boolean) {
-
-    def merge(l1: List[A], l2: List[A], acc: List[A], is: (Option[Int], Option[Int])): List[A] = {
-
-      def iterate(xs: List[A], i: Int): Option[(A, Int)] = {
-        if (i >= xs.size){
-          None
+  def merge[A](a: List[A], b: List [A], f: (A,A) => Boolean): List[A] = {
+    @scala.annotation.tailrec
+    def go(a: List[A], b: List[A], result: List[A]): List[A] = {
+      if(a.nonEmpty && b.nonEmpty){
+        if(f(a.head, b.head)){
+          go(a.tail , b, result :+ a.head)
         } else {
-          Some((xs(i), i + 1))
+          go(a, b.tail, result :+ b.head)
+        }
+      } else {
+        if (a.nonEmpty) {
+          result ++ a
+        } else if (b.nonEmpty) {
+          result ++ b
+        } else {
+          result
         }
       }
-
-      is._1.flatMap { itt1 =>
-        is._2.map { itt2 =>
-          iterate(l1, itt1) match {
-            case None =>
-              iterate(l2, itt2) match {
-                case None => acc
-                case Some((a2, i2)) =>
-                  merge(l1, l2, acc :+ a2,  (None, Some(i2)))
-
-              }
-            case Some((a1, i1)) =>
-              iterate(l2, itt2) match {
-                case None => acc
-                case Some((a2, i2)) =>
-                  if(f(a2, a1)){
-                    merge(l1, l2, acc :+ a1,  (Some(i1), Some(i2)))
-                  } else {
-                    merge(l1, l2, acc :+ a2,  (Some(i1), Some(i2)))
-                  }
-              }
-          }
-        }
-      }.getOrElse(acc)
-
     }
-
+    go(a,b, Nil)
   }
 
+  def mergeSort[A](l: List[A], f: (A,A) => Boolean): List[A] = {
+    if(l.length == 1){
+      l
+    } else {
+      val (a,b) = l.splitAt(l.length / 2)
+      merge(mergeSort(a, f), mergeSort(b, f), f)
+    }
+  }
 
-
+  println(mergeSort[Int](List(4,3,2,1,5,3,4,5,6), (a,b) => a < b))
+  println(mergeSort[String](List("n","b","c","a","k"), (a,b) => a > b))
 
 }
