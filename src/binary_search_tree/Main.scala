@@ -12,23 +12,24 @@ object Tree extends App {
       val right = r.tail
       (root, left, right)
     }
-    def go(xs: List[A]): Tree = {
-      if (xs.length == 3) {
+
+    def go(xs: List[A]): Tree = xs.length match {
+      case 3 =>
         val (root, left, right) = split(xs)
         Branch(Branch(Leaf, Leaf, left.head), Branch(Leaf, Leaf, right.head), root)
-      } else if (xs.length == 2) {
+      case 2 =>
         val (root, left, _) = split(xs)
         Branch(Branch(Leaf, Leaf, left.head), Leaf, root)
-      } else if (xs.length == 1) {
+      case 1 =>
         val (root, _, _) = split(xs)
         Branch(Leaf, Leaf, root)
-      } else if (xs.isEmpty) {
+      case 0 =>
         Leaf
-      } else {
+      case _ =>
         val (root, left, right) = split(xs)
         Branch(go(left), go(right), root)
-      }
     }
+
     go(xs.sortWith(f).distinct)
   }
       val xs = List("b","a","c","e","d")
