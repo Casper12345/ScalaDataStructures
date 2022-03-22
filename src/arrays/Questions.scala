@@ -78,4 +78,46 @@ object Questions extends App {
   }
   println(toUrl(" Mr John Smith         ", 15))
 
+  //  One Away: There are three types of edits that can be performed on strings: insert
+  //  a character, remove a character, or replace a character. Given two strings,
+  //  write a function to check if they are one edit (or zero edits) away.
+
+  def oneWay(s1: String, s2: String): Boolean = {
+    def checkReplace: Boolean =
+      s1.zip(s2).count { case (a, b) => a != b } == 1
+
+    def checkInsert: Boolean =
+      (s1.length + 1 == s2.length) || (s1.length == s2.length + 1)
+
+    def checkDelete: Boolean =
+      (s1.length -1 == s2.length) || (s1.length == s2.length - 1)
+
+    if(s1.length == s2.length) {
+      checkReplace
+    } else {
+      checkInsert || checkDelete
+    }
+  }
+
+
+  //  String Compression: Implement a method to perform basic string compression using the counts of repeated characters.
+  //  For example, the string aabcccccaaa would become a2b1c5a3. If the "compressed" string would not become
+  //  smaller than the original string, your method should return the original string.
+  //  You can assume the string has only uppercase and lowercase letters (a - z).
+
+
+  def compress(s: String): String = {
+    @tailrec
+    def go(s: List[Char], count: Int, acc: String): String = s match {
+      case h1 :: Nil => acc :+ h1 :+ s"$count".head
+      case h1 :: h2 :: t => if (h1 == h2) go(h2 :: t, count + 1, acc) else go(h2 :: t, 1, acc :+ h1 :+ s"$count".head)
+      case Nil => acc
+    }
+    go(s.toCharArray.toList, 1, "")
+  }
+
+  println(compress("aabcccccaaat"))
+
+
+
 }
