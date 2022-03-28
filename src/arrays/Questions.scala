@@ -119,5 +119,17 @@ object Questions extends App {
   println(compress("aabcccccaaat"))
 
 
+  //Describe a recursive algorithm for finding the maximum element in an array, A, of n elements. What is your running time and space usage?
+
+  def maximum(xs: List[Int], f: (Int, Int) => Int): Int =
+    if(xs.size == 1) xs.head else {
+      val (l,r) = xs.splitAt(xs.size / 2)
+      f(maximum(l, f), maximum(r, f))
+    }
+
+  println(maximum(List(1,9,0,1,2,12,1,10,12), (a,b) => if(a > b) a else b))
+
+
+
 
 }
