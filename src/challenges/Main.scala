@@ -92,5 +92,57 @@ object Main1 extends App {
 
   println(buildList2(input))
 
+}
+
+object Main2 extends App {
+
+
+  def findDegree(a: Array[Int]): Int = {
+
+    val count = Array.fill(a.max + 1)(0)
+    val m = mutable.Map[Int, (Int, Int)]()
+
+    @scala.annotation.tailrec
+    def buildMap(i: Int): Unit =
+      if (i < a.length) {
+        count(a(i)) = count(a(i)) + 1
+        if(m.contains(a(i))){
+          m.put(a(i), (m(a(i))._1, i))
+        } else {
+          m.put(a(i), (i, i))
+        }
+        buildMap(i + 1)
+      }
+
+    buildMap(0)
+
+    @tailrec
+    def findHighest(i: Int, max: Int, buf: List[Int]): List[Int] =
+      if(i < count.length) {
+        if(count(i) == max){
+          findHighest(i + 1, max, i :: buf)
+        } else findHighest(i + 1, max, buf)
+      } else buf
+
+    @tailrec
+    def getDegree(xs: List[Int], acc: Int): Int = xs match {
+      case h :: t =>
+        val (s,e) = m(h)
+        val length = e - s + 1
+        if(length > acc){
+          getDegree(t, length)
+        } else {
+          getDegree(t, acc)
+        }
+      case Nil => acc
+    }
+
+    getDegree(findHighest(0, count.max, Nil), 0)
+
+  }
+
+  println(findDegree(Array(1,2,3,4,5,6,1,2,2)))
+
+
 
 }

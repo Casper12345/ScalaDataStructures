@@ -52,7 +52,7 @@ object Main extends App {
     }
   }
 
-  matrixPrint(gr, breathFirstSearch(gr, 3, 93))
+  matrixPrint(gr, depthFirstSearch(gr, 3, 93))
 
 
   private def pathTo(s: Int, v: Int, edgeTo: List[Int]): List[Int] = {
@@ -78,8 +78,8 @@ object Main extends App {
           if (!visited(h)) {
             edgeTo(h) = v
             go(gr, h)
-            traverseEdges(t)
           }
+          traverseEdges(t)
         case Nil => ()
       }
       traverseEdges(gr.adj(v))
