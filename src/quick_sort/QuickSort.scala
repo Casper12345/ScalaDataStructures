@@ -54,5 +54,5 @@ object QuickSort {
 }
 
 object Main extends App {
-  println(QuickSort.sort[Int](List(9,8,7,6,5,7,2,1,0))(_ < _))
+  println(QuickSort.sort[Int](List(9,8,7,6,5,7,2,1,0,-1,20,44,99))(_ < _))
 }

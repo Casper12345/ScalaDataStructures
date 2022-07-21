@@ -12,10 +12,8 @@ object Main extends App {
    maxHeap.insert(3)
    maxHeap.insert(4)
    maxHeap.insert(10)
+   maxHeap.insert(18)
    maxHeap.print
-
-
-
 }
 
 
@@ -38,6 +36,20 @@ class BinaryHeap[A: ClassTag](f: (A,A) => Boolean)  {
     go(k)
   }
 
+  private def sink(k: Int): Unit = {
+    @tailrec
+    def go(k: Int): Unit =
+      if(2 * k <= size) {
+        val j = if(f(a(2*k), a(2*k+1))) 2*k+1 else 2*k
+        if(!f(a(k), a(j))) () else {
+          swap(a, k, j)
+          go(j)
+        }
+      } else ()
+    go(k)
+  }
+
+
   private def swap(a: Array[A], x: Int, y: Int): Unit = {
     val buffer = a(y)
     a(y) = a(x)
@@ -49,6 +61,20 @@ class BinaryHeap[A: ClassTag](f: (A,A) => Boolean)  {
     a(size) = i
     swim(size)
   }
+
+  def deleteMax: A = {
+    val max = a(1)
+    swap(a, 1, size)
+    a(size) = null.asInstanceOf[A]
+    size = size - 1
+    sink(1)
+    max
+  }
+
 }
+
+
+
+
 
 
