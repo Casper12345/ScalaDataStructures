@@ -7,7 +7,7 @@ object MergeSort extends App {
     def go(a: List[A], b: List[A], result: List[A]): List[A] = {
       if(a.nonEmpty && b.nonEmpty){
         if(f(a.head, b.head)){
-          go(a.tail , b, result :+ a.head)
+          go(a.tail, b, result :+ a.head)
         } else {
           go(a, b.tail, result :+ b.head)
         }
