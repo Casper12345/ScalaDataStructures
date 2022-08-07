@@ -6,36 +6,43 @@ import scala.reflect.ClassTag
 object SelectionSort extends App {
 
   def sort[A: ClassTag](xs: List[A], f: (A, A) => Boolean): List[A] = {
-    val arr = xs.toArray
+    val a = xs.toArray
 
     def swap(i1: Int, i2: Int): Unit = {
-      val a = arr(i1)
-      arr(i1) = arr(i2)
-      arr(i2) = a
+      val acc = a(i1)
+      a(i1) = a(i2)
+      a(i2) = acc
     }
 
     @tailrec
-    def find(i: Int, index: Int): Int =
-      if (i > arr.length - 1) index else {
-        if (f(arr(index), arr(i))) find(i + 1, i) else find(i + 1, index)
+    def find(i: Int, j: Int, acc: Option[Int] = None): Unit =
+      if(j == a.length) {
+        acc match {
+          case Some(index) => swap(i,index)
+          case None => ()
+        }
+      } else {
+        if(f(a(j), a(i))) {
+          acc match {
+            case Some(index) =>
+              if (f(a(j), a(index))) find(i, j+1, Some(j)) else find(i, j+1, acc)
+            case None => find(i, j+1, Some(j))
+          }
+        } else find(i, j+1, acc)
       }
 
     @tailrec
     def go(i: Int): Unit =
-      if (i < arr.length) {
-        val index = find(0, i)
-        println(index)
-        if (!f(arr(index), arr(i))) {
-          swap(index, i)
-          go(i + 1)
-        }
+      if(i < a.length){
+        find(i, i + 1)
+        go(i +1)
       }
 
     go(0)
-    arr.toList
+    a.toList
   }
 
 
-  println(sort[Int](List(7, 6, 5, 4, 3, 2, 1), _ < _))
+  println(sort[Int](List(7,10,5,3,8,4,2,9,6,1), _ < _))
 
 }

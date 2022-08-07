@@ -1,4 +1,4 @@
-package bubble_sort_tailRec
+package bubble_sort
 
 import scala.annotation.tailrec
 

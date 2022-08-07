@@ -1,40 +1,31 @@
 package binarySearch
 
+trait BinarySearchSecond {
 
-object BinarySearch {
-  def apply() =
-    new BinarySearch
-}
 
-class BinarySearch {
+  def binarySearch[A](xs: Array[A], i: A)(f: (A, A) => Boolean): Boolean = {
 
-  def search[A <: Ordered[A]](lst: List[A], index: A): Boolean = {
-    def helper(lst: List[A]): Boolean = {
-      if (lst(lst.size / 2) == index) {
-        return true
-      }
-
-      if (lst.size / 2 == 0) {
-        false
-      } else {
-        val split = lst.splitAt(lst.size / 2)
-        if (lst(lst.size / 2) > index)
-          helper(split._2)
-        else
-          helper(split._1)
-      }
+    if (xs.length < 2) {
+      return false
     }
 
-    helper(lst)
-  }
+    if (xs(xs.length / 2) == i) {
+      true
+    } else {
+      val (a1, a2) = xs.splitAt(xs.length / 2)
 
+      if (f(i, xs(xs.length / 2))) {
+        binarySearch(a1, i)(f)
+      } else {
+        binarySearch(a2, i)(f)
+      }
+    }
+  }
 
 }
 
-object Main extends App {
+object Main2 extends App with BinarySearchSecond {
 
-  val b = BinarySearch.apply()
-
-  println(b.search(List[Box[String]](Box("a"), Box("b")), Box("a")))
+  println(binarySearch(Array(1, 2, 3, 4, 5, 6, 7), 3)((a, b) => a < b))
 
 }
