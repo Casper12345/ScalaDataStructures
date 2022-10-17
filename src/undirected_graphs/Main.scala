@@ -1,4 +1,4 @@
-package graphs
+package undirected_graphs
 
 import scala.annotation.tailrec
 
@@ -132,6 +132,7 @@ object Main extends App {
 }
 
 case class Graph(size: Int){
+  // adjacency list representation
   var edges: Array[List[Int]] = Array.fill(size)(Nil)
   def addEdge(v: Int, w: Int): Unit = {
     edges(v) = w :: edges(v)

@@ -1,4 +1,4 @@
-package sorting
+package simple_sorting
 
 import scala.annotation.tailrec
 import scala.reflect.ClassTag
